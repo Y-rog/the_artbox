@@ -1,23 +1,27 @@
-<?php include('header.php');
-$id = $_GET['id'];
-$o = null;
+<?php 
+include('header.php');
+include('bdd.php');
+$bdd = connexion();
 
-include ('oeuvres.php');
-foreach ($oeuvres as $oeuvre) {
-    if ($oeuvre['id'] == $id) {
-        $o = $oeuvre;
-    }
+//Si l'URL ne contient pas d'id, on redirige vers la page d'accueil
+if (empty($_GET['id'])) {
+    header('Location: index.php');
 }
+
+$requête = $bdd->prepare('SELECT * FROM oeuvres WHERE id = ?');
+$requête->execute([$_GET['id']]);
+$oeuvre = $requête->fetch();
+
 ?> 
     <article id="detail-oeuvre">
         <div id="img-oeuvre">
-            <img src="<?= $o['image']; ?>" alt="<?= $o['titre']; ?>">
+            <img src="<?= $oeuvre['image']; ?>" alt="<?= $oeuvre['titre']; ?>">
         </div>
         <div id="contenu-oeuvre">
-            <h1><?= $o['titre']; ?></h1>
-            <p class="description"><?= $o['artiste']; ?></p>
+            <h1><?= $oeuvre['titre']; ?></h1>
+            <p class="description"><?= $oeuvre['artiste']; ?></p>
             <p class="description-complete">
-                <?= $o['description']; ?>
+                <?= $oeuvre['description']; ?>
             </p>
         </div>
     </article>
