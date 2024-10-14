@@ -1,5 +1,9 @@
-<?php include('header.php');
-include ('oeuvres.php'); ?> 
+<?php 
+    include('header.php');
+    include ('bdd.php');
+    $bdd = connexion();
+    $oeuvres = $bdd->query('SELECT * FROM oeuvres');
+ ?> 
     <div id="liste-oeuvres">
         <?php foreach ($oeuvres as $oeuvre) { ?>
             <article class="oeuvre">
